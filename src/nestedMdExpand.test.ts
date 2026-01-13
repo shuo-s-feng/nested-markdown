@@ -5,7 +5,7 @@ describe("expandNestedMarkdown", () => {
   it("expands a fenced nested-md block", async () => {
     const input = [
       "before",
-      '```nested-md title="Note" emoji="💡" show="both"',
+      '```nested-md emoji="💡" show="both"',
       "# Nested content",
       "- Item",
       "```",
@@ -20,10 +20,10 @@ describe("expandNestedMarkdown", () => {
 
   it("expands nested fenced blocks recursively", async () => {
     const input = [
-      "````nested-md title=\"Outer\" show=\"preview\"",
+      "````nested-md show=\"preview\"",
       "Outer content",
       "",
-      "```nested-md title=\"Inner\" show=\"preview\"",
+      "```nested-md show=\"preview\"",
       "Inner content",
       "```",
       "````",
@@ -38,7 +38,7 @@ describe("expandNestedMarkdown", () => {
   it("keeps legacy HTML comment nested-md blocks working", async () => {
     const input = [
       "before",
-      '<!-- nested-md:start title="Legacy" show="preview" -->',
+      '<!-- nested-md:start show="preview" -->',
       "```md",
       "legacy content",
       "```",

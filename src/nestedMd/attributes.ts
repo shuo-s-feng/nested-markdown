@@ -1,6 +1,8 @@
 import type { InlineMdBlockAttributes } from "./types";
 
-export function parseAttributes(attributeText: string): InlineMdBlockAttributes {
+export function parseAttributes(
+  attributeText: string
+): InlineMdBlockAttributes {
   const attributes: InlineMdBlockAttributes = {};
 
   const attributeRegex = /(\w+)="([^"]*)"/g;
@@ -18,10 +20,9 @@ export function parseAttributes(attributeText: string): InlineMdBlockAttributes 
       }
     } else if (
       key === "id" ||
-      key === "title" ||
-      key === "bg" ||
-      key === "text" ||
-      key === "border" ||
+      key === "bgColor" ||
+      key === "textColor" ||
+      key === "borderColor" ||
       key === "emoji" ||
       key === "style"
     ) {
@@ -33,4 +34,3 @@ export function parseAttributes(attributeText: string): InlineMdBlockAttributes 
 
   return attributes;
 }
-

@@ -1,10 +1,9 @@
 export interface InlineMdBlockAttributes {
   id?: string;
-  title?: string;
   show?: "preview" | "code" | "both";
-  bg?: string;
-  text?: string;
-  border?: string;
+  bgColor?: string;
+  textColor?: string;
+  borderColor?: string;
   emoji?: string;
   boxed?: "true" | "false";
   style?: string;
@@ -16,4 +15,3 @@ export interface ParsedInlineMdBlock {
   attributes: InlineMdBlockAttributes;
   nestedMarkdown: string;
 }
-

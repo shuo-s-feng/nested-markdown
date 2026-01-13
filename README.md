@@ -12,7 +12,7 @@ import NestedMarkdown, { expandNestedMarkdown } from "react-nested-markdown";
 const md = `
 This is normal markdown.
 
-<!-- nested-md:start title="Note" emoji="💡" show="both" bg="#F8FFEE" text="#0F172A" border="#A5D6A7" -->
+<!-- nested-md:start emoji="💡" show="both" bgColor="#F8FFEE" textColor="#0F172A" borderColor="#A5D6A7" -->
 ```md
 - Supports GFM, tables, lists
 - Renders preview and/or original code
@@ -43,9 +43,8 @@ export default function App() {
 
 ### Attributes
 - `id?: string` — Copied to `data-id` on wrapper
-- `title?: string` — Title above the content
 - `show?: "preview" | "code" | "both"` — Display mode
-- `bg?: string`, `text?: string`, `border?: string` — Colors
+- `bgColor?: string`, `textColor?: string`, `borderColor?: string` — Colors
 - `emoji?: string` — Emoji/icon column
 - `boxed?: "true" | "false"` — Boxed UI (default true)
 - `style?: string` — Extra inline styles for wrapper

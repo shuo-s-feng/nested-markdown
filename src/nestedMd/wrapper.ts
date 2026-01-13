@@ -2,9 +2,9 @@ import type { InlineMdBlockAttributes } from "./types";
 import { escapeHtmlAttr, escapeHtmlText } from "./escape";
 
 const DEFAULT_STYLES = {
-  bg: "#EEF6FF",
-  text: "#0F172A",
-  border: "#93C5FD",
+  bgColor: "#EEF6FF",
+  textColor: "#0F172A",
+  borderColor: "#93C5FD",
   show: "preview" as const,
 };
 
@@ -16,9 +16,9 @@ export function generateWrapperHTML(params: {
   const { attributes, nestedMarkdown, renderedHTML } = params;
 
   const styles = {
-    bg: attributes.bg || DEFAULT_STYLES.bg,
-    text: attributes.text || DEFAULT_STYLES.text,
-    border: attributes.border || DEFAULT_STYLES.border,
+    bgColor: attributes.bgColor || DEFAULT_STYLES.bgColor,
+    textColor: attributes.textColor || DEFAULT_STYLES.textColor,
+    borderColor: attributes.borderColor || DEFAULT_STYLES.borderColor,
     show: attributes.show || DEFAULT_STYLES.show,
   };
 
@@ -26,9 +26,9 @@ export function generateWrapperHTML(params: {
   let wrapperStyle = "";
 
   if (isBoxed) {
-    wrapperStyle = `display: flex; align-items: flex-start; gap: 16px; border-radius: 10px; padding: 16px 20px; margin: 16px 0; background-color: ${styles.bg}; color: ${styles.text}; border: 1px solid ${styles.border};`;
+    wrapperStyle = `display: flex; align-items: flex-start; gap: 16px; border-radius: 10px; padding: 16px 20px; margin: 16px 0; background-color: ${styles.bgColor}; color: ${styles.textColor}; border: 1px solid ${styles.borderColor};`;
   } else {
-    wrapperStyle = `display: flex; align-items: flex-start; gap: 16px; margin: 16px 0; color: ${styles.text};`;
+    wrapperStyle = `display: flex; align-items: flex-start; gap: 16px; margin: 16px 0; color: ${styles.textColor};`;
   }
 
   if (attributes.style) {
@@ -39,13 +39,6 @@ export function generateWrapperHTML(params: {
   if (attributes.emoji) {
     emojiHTML = `<div style="flex-shrink: 0; font-size: 18px; line-height: 1; margin-top: 2px;">${escapeHtmlText(
       attributes.emoji
-    )}</div>`;
-  }
-
-  let titleHTML = "";
-  if (attributes.title) {
-    titleHTML = `<div style="font-weight: 600; margin-bottom: 8px;">${escapeHtmlText(
-      attributes.title
     )}</div>`;
   }
 
@@ -65,7 +58,7 @@ export function generateWrapperHTML(params: {
   } else if (styles.show === "both") {
     bodyHTML =
       `<div class="nested-md-content">${safeRenderedHTML}</div>` +
-      `<hr style="margin: 16px 0; border: none; border-top: 1px solid ${styles.border};" />` +
+      `<hr style="margin: 16px 0; border: none; border-top: 1px solid ${styles.borderColor};" />` +
       `<pre style="margin: 0; overflow-x: auto;"><code>${escapedMarkdown}</code></pre>`;
   }
 
@@ -75,5 +68,5 @@ export function generateWrapperHTML(params: {
 
   return `<div data-nested-md="true"${idAttr} style="${escapeHtmlAttr(
     wrapperStyle
-  )}">${emojiHTML}<div style="flex-grow: 1; min-width: 0;">${titleHTML}${bodyHTML}</div></div>`;
+  )}">${emojiHTML}<div style="flex-grow: 1; min-width: 0;">${bodyHTML}</div></div>`;
 }
