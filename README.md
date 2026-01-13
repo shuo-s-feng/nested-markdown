@@ -3,7 +3,7 @@
 React renderer for extended markdown with inline nested markdown blocks.
 
 ## Install
-- `npm i nested-markdown react react-dom @mui/material @emotion/react @emotion/styled antd`
+- `npm i nested-markdown react react-dom antd`
 
 ## Quick Start
 ```tsx
@@ -30,7 +30,7 @@ export default function App() {
   - `content: string` — Markdown source
   - `className?: string` — Class for outer container
   - `components?: Components` — `react-markdown` overrides merged with defaults
-  - `sx?: SxProps<Theme>` — MUI `Box` styles
+  - `style?: React.CSSProperties` — Inline styles for the outer container
 - `expandNestedMarkdown(markdown: string): Promise<string>` — Preprocesses nested blocks into safe HTML
 
 ## Nested Block Syntax
@@ -52,7 +52,6 @@ export default function App() {
 ## Styling Defaults
 - Tables are wrapped with horizontal scroll and basic table styles
 - Images render via `antd` `Image` and normalize relative `src` paths
-- Blockquotes use MUI `Box` with tuned typography
 - Inline `code` and `mark` have gentle defaults
 
 ## Security
@@ -60,7 +59,7 @@ export default function App() {
 - Strict `rehype-sanitize` schema allows only needed tags/attributes including `div[data-nested-md]`
 
 ## SSR
-- Designed to work with SSR setups; ensure peer deps (`react`, `@mui/material`, `@emotion/*`, `antd`) are present in the host app
+- Designed to work with SSR setups; ensure peer deps (`react`, `antd`) are present in the host app
 
 ## License
 - MIT © Contributors

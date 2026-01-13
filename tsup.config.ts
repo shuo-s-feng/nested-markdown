@@ -9,9 +9,6 @@ export default defineConfig({
   external: [
     "react",
     "react-dom",
-    "@mui/material",
-    "@emotion/react",
-    "@emotion/styled",
     "antd"
   ]
 });
