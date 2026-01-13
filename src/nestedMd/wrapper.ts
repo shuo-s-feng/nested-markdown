@@ -26,9 +26,9 @@ export function generateWrapperHTML(params: {
   let wrapperStyle = "";
 
   if (isBoxed) {
-    wrapperStyle = `display: flex; align-items: flex-start; gap: 16px; border-radius: 10px; padding: 16px 20px; margin: 16px 0; background-color: ${styles.bgColor}; color: ${styles.textColor}; border: 1px solid ${styles.borderColor};`;
+    wrapperStyle = `display: flex; align-items: baseline; gap: 16px; border-radius: 10px; padding: 16px 20px; margin: 16px 0; background-color: ${styles.bgColor}; color: ${styles.textColor}; border: 1px solid ${styles.borderColor};`;
   } else {
-    wrapperStyle = `display: flex; align-items: flex-start; gap: 16px; margin: 16px 0; color: ${styles.textColor};`;
+    wrapperStyle = `display: flex; align-items: baseline; gap: 16px; margin: 16px 0; color: ${styles.textColor};`;
   }
 
   if (attributes.style) {
@@ -37,7 +37,7 @@ export function generateWrapperHTML(params: {
 
   let emojiHTML = "";
   if (attributes.emoji) {
-    emojiHTML = `<div style="flex-shrink: 0; font-size: 18px; line-height: 1; margin-top: 2px;">${escapeHtmlText(
+    emojiHTML = `<div style="flex-shrink: 0; font-size: 18px; line-height: 1;">${escapeHtmlText(
       attributes.emoji
     )}</div>`;
   }

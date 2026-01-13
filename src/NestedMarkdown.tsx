@@ -215,7 +215,7 @@ export const NestedMarkdown = ({
     ".nmd-root > *:last-child": { marginBottom: 0 },
     ".nmd-root .nested-md-content > *:first-child": { marginTop: 0 },
     ".nmd-root .nested-md-content > *:last-child": { marginBottom: 0 },
-    ".nmd-root p": { margin: "1em 0" },
+    ".nmd-root p": { margin: "0.5em 0" },
     ".nmd-root h1, .nmd-root h2, .nmd-root h3, .nmd-root h4, .nmd-root h5, .nmd-root h6":
       {
         fontWeight: 600,
@@ -254,6 +254,14 @@ export const NestedMarkdown = ({
       listStyleType: "decimal",
     },
     ".nmd-root li": { margin: "0.5em 0" },
+    ".nmd-root ul > li:first-child, .nmd-root ol > li:first-child": {
+      marginTop: 0,
+    },
+    ".nmd-root ul > li:last-child, .nmd-root ol > li:last-child": {
+      marginBottom: 0,
+    },
+    ".nmd-root li > *:first-child": { marginTop: 0 },
+    ".nmd-root li > *:last-child": { marginBottom: 0 },
     ".nmd-root li > ul, .nmd-root li > ol": { marginTop: "0.5em" },
     ".nmd-root hr": {
       border: "none",
@@ -300,6 +308,12 @@ export const NestedMarkdown = ({
       padding: "10px 12px",
       borderBottom: "1px solid var(--nmd-border)",
       verticalAlign: "top",
+    },
+    ".nmd-root .nmd-th > *:first-child, .nmd-root .nmd-td > *:first-child": {
+      marginTop: 0,
+    },
+    ".nmd-root .nmd-th > *:last-child, .nmd-root .nmd-td > *:last-child": {
+      marginBottom: 0,
     },
     ".nmd-root .nmd-td": {
       padding: "10px 12px",
