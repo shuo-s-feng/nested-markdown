@@ -7,7 +7,7 @@ export default defineConfig({
   resolve: {
     alias: {
       "nested-markdown": fileURLToPath(
-        new URL("../../src/index.ts", import.meta.url)
+        new URL("../src/index.ts", import.meta.url)
       ),
     },
   },
