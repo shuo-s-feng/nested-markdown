@@ -20,10 +20,10 @@ describe("expandNestedMarkdown", () => {
 
   it("expands nested fenced blocks recursively", async () => {
     const input = [
-      "````nested-md show=\"preview\"",
+      '````nested-md show="preview"',
       "Outer content",
       "",
-      "```nested-md show=\"preview\"",
+      '```nested-md show="preview"',
       "Inner content",
       "```",
       "````",
@@ -50,5 +50,20 @@ describe("expandNestedMarkdown", () => {
     const output = await expandNestedMarkdown(input);
     expect(output).toContain('data-nested-md="true"');
     expect(output).toContain("legacy content");
+  });
+
+  it("adds dark-mode-compatible colors for custom styles", async () => {
+    const input = [
+      '```nested-md bgColor="#ff0000" textColor="#1d4ed8" borderColor="#22c55e" show="both"',
+      "Hello",
+      "```",
+      "",
+    ].join("\n");
+
+    const output = await expandNestedMarkdown(input);
+    expect(output).toContain("--nmd-inline-bg-dark:");
+    expect(output).toMatch(/--nmd-inline-bg-dark:\s*(?:rgba|rgb)\(/);
+    expect(output).toContain("--nmd-inline-text-dark:");
+    expect(output).toContain("--nmd-inline-border-dark:");
   });
 });

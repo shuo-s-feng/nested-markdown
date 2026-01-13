@@ -31,6 +31,7 @@ export default function App() {
   - `className?: string` — Class for outer container
   - `components?: Components` — `react-markdown` overrides merged with defaults
   - `style?: React.CSSProperties` — Inline styles for the outer container
+  - `theme?: "light" | "dark" | "auto"` — Color theme (default `"auto"`)
 - `expandNestedMarkdown(markdown: string): Promise<string>` — Preprocesses nested blocks into safe HTML
 
 ## Nested Block Syntax

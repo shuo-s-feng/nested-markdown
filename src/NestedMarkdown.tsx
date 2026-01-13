@@ -60,8 +60,13 @@ const customSchema = {
     ...defaultSchema.attributes,
     div: [
       ...(defaultSchema.attributes?.div || []),
+      // Allow the HAST property names for data-* attributes in the sanitize schema
       ["data-nested-md"],
+      ["dataNestedMd"],
+      ["data-boxed"],
+      ["dataBoxed"],
       ["data-id"],
+      ["dataId"],
       ["style"],
       ["className"],
     ],
@@ -95,6 +100,7 @@ export interface NestedMarkdownProps {
   className?: string;
   components?: Components;
   style?: CSSProperties;
+  theme?: "light" | "dark" | "auto";
 }
 
 export const NestedMarkdown = ({
@@ -102,6 +108,7 @@ export const NestedMarkdown = ({
   className,
   components,
   style,
+  theme = "auto",
 }: NestedMarkdownProps) => {
   const [expandedMarkdown, setExpandedMarkdown] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -191,6 +198,24 @@ export const NestedMarkdown = ({
 
   const mergedComponents = { ...defaultComponents, ...components };
 
+  const darkThemeVars: CssDeclarations = {
+    "--nmd-text": "#e2e8f0",
+    "--nmd-muted": "#94a3b8",
+    "--nmd-border": "rgba(148, 163, 184, 0.22)",
+    "--nmd-bg": "#0b1220",
+    "--nmd-code-bg": "rgba(148, 163, 184, 0.12)",
+    "--nmd-code-border": "rgba(148, 163, 184, 0.25)",
+    "--nmd-quote-bg": "rgba(148, 163, 184, 0.08)",
+    "--nmd-link": "#60a5fa",
+    "--nmd-link-hover": "#93c5fd",
+    "--nmd-mark-bg": "rgba(250, 204, 21, 0.22)",
+    "--nmd-mark-text": "#e2e8f0",
+    "--nmd-nested-bg": "rgba(96, 165, 250, 0.14)",
+    "--nmd-nested-text": "#e2e8f0",
+    "--nmd-nested-border": "rgba(96, 165, 250, 0.45)",
+    colorScheme: "dark",
+  };
+
   const stylesheet = cssFromRules({
     ".nmd-root": {
       "--nmd-font":
@@ -204,12 +229,33 @@ export const NestedMarkdown = ({
       "--nmd-quote-bg": "rgba(2, 6, 23, 0.04)",
       "--nmd-link": "#2563eb",
       "--nmd-link-hover": "#1d4ed8",
+      "--nmd-mark-bg": "#ffeb3b",
+      "--nmd-mark-text": "inherit",
+      "--nmd-nested-bg": "#eef6ff",
+      "--nmd-nested-text": "#0f172a",
+      "--nmd-nested-border": "#93c5fd",
       fontFamily: "var(--nmd-font)",
       fontSize: "14px",
       lineHeight: "1.7",
       color: "var(--nmd-text)",
       WebkitFontSmoothing: "antialiased",
       MozOsxFontSmoothing: "grayscale",
+      colorScheme: "light",
+    },
+    ".nmd-root[data-theme='dark']": darkThemeVars,
+    ".nmd-root[data-theme='dark'] [data-nested-md]": {
+      color:
+        "var(--nmd-inline-text-dark, var(--nmd-inline-text-light)) !important",
+    },
+    ".nmd-root[data-theme='dark'] [data-nested-md][data-boxed='true']": {
+      backgroundColor:
+        "var(--nmd-inline-bg-dark, var(--nmd-inline-bg-light)) !important",
+      borderColor:
+        "var(--nmd-inline-border-dark, var(--nmd-inline-border-light)) !important",
+    },
+    ".nmd-root[data-theme='dark'] [data-nested-md] hr": {
+      borderTopColor:
+        "var(--nmd-inline-border-dark, var(--nmd-inline-border-light)) !important",
     },
     ".nmd-root > *:first-child": { marginTop: 0 },
     ".nmd-root > *:last-child": { marginBottom: 0 },
@@ -332,19 +378,40 @@ export const NestedMarkdown = ({
     ".nmd-root .nmd-blockquote > *:first-child": { marginTop: 0 },
     ".nmd-root .nmd-blockquote > *:last-child": { marginBottom: 0 },
     ".nmd-root mark": {
-      backgroundColor: "#ffeb3b",
-      color: "inherit",
+      backgroundColor: "var(--nmd-mark-bg)",
+      color: "var(--nmd-mark-text)",
       padding: "0.1em 0.3em",
       borderRadius: "2px",
     },
   });
 
+  const autoDarkStylesheet = `@media (prefers-color-scheme: dark) { ${cssFromRules(
+    {
+      ".nmd-root[data-theme='auto']": darkThemeVars,
+      ".nmd-root[data-theme='auto'] [data-nested-md]": {
+        color:
+          "var(--nmd-inline-text-dark, var(--nmd-inline-text-light)) !important",
+      },
+      ".nmd-root[data-theme='auto'] [data-nested-md][data-boxed='true']": {
+        backgroundColor:
+          "var(--nmd-inline-bg-dark, var(--nmd-inline-bg-light)) !important",
+        borderColor:
+          "var(--nmd-inline-border-dark, var(--nmd-inline-border-light)) !important",
+      },
+      ".nmd-root[data-theme='auto'] [data-nested-md] hr": {
+        borderTopColor:
+          "var(--nmd-inline-border-dark, var(--nmd-inline-border-light)) !important",
+      },
+    }
+  )} }`;
+
   return (
     <div
       className={["nmd-root", className].filter(Boolean).join(" ")}
       style={style}
+      data-theme={theme}
     >
-      <style>{stylesheet}</style>
+      <style>{`${stylesheet}\n${autoDarkStylesheet}`}</style>
       <ReactMarkdown
         remarkPlugins={[remarkGfm] as unknown as PluggableList}
         rehypePlugins={
