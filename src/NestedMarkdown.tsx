@@ -23,6 +23,7 @@ const customSchema = {
     div: [
       ...(defaultSchema.attributes?.div || []),
       ["data-inline-md"],
+      ["data-nested-md"],
       ["data-id"],
       ["style"],
       ["className"],
