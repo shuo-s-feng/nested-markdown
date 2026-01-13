@@ -12,12 +12,12 @@ import NestedMarkdown, { expandNestedMarkdown } from "react-nested-markdown";
 const md = `
 This is normal markdown.
 
-<!-- inline-md:start title="Note" emoji="💡" show="both" bg="#F8FFEE" text="#0F172A" border="#A5D6A7" -->
+<!-- nested-md:start title="Note" emoji="💡" show="both" bg="#F8FFEE" text="#0F172A" border="#A5D6A7" -->
 ```md
 - Supports GFM, tables, lists
 - Renders preview and/or original code
 ```
-<!-- inline-md:end -->
+<!-- nested-md:end -->
 `;
 
 export default function App() {
@@ -33,10 +33,10 @@ export default function App() {
   - `sx?: SxProps<Theme>` — MUI `Box` styles
 - `expandNestedMarkdown(markdown: string): Promise<string>` — Preprocesses nested blocks into safe HTML
 
-## Inline Block Syntax
-- Wrap inline blocks with:
-  - Start: `<!-- inline-md:start key="value" ... -->`
-  - End: `<!-- inline-md:end -->`
+## Nested Block Syntax
+- Wrap nested blocks with:
+  - Start: `<!-- nested-md:start key="value" ... -->`
+  - End: `<!-- nested-md:end -->`
 - Body can be:
   - Fenced: ```md ... ```
   - Raw markdown text (no fence)
@@ -58,7 +58,7 @@ export default function App() {
 
 ## Security
 - `rehype-raw` is enabled to render the preprocessed HTML
-- Strict `rehype-sanitize` schema allows only needed tags/attributes including `div[data-inline-md]`
+- Strict `rehype-sanitize` schema allows only needed tags/attributes including `div[data-nested-md]`
 
 ## SSR
 - Designed to work with SSR setups; ensure peer deps (`react`, `@mui/material`, `@emotion/*`, `antd`) are present in the host app

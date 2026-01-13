@@ -15,7 +15,6 @@ describe("expandNestedMarkdown", () => {
 
     const output = await expandNestedMarkdown(input);
     expect(output).toContain('data-nested-md="true"');
-    expect(output).toContain('data-inline-md="true"');
     expect(output).not.toContain("```nested-md");
   });
 
@@ -36,21 +35,20 @@ describe("expandNestedMarkdown", () => {
     expect(occurrences).toBe(2);
   });
 
-  it("keeps legacy HTML comment inline-md blocks working", async () => {
+  it("keeps legacy HTML comment nested-md blocks working", async () => {
     const input = [
       "before",
-      '<!-- inline-md:start title="Legacy" show="preview" -->',
+      '<!-- nested-md:start title="Legacy" show="preview" -->',
       "```md",
       "legacy content",
       "```",
-      "<!-- inline-md:end -->",
+      "<!-- nested-md:end -->",
       "after",
       "",
     ].join("\n");
 
     const output = await expandNestedMarkdown(input);
-    expect(output).toContain('data-inline-md="true"');
+    expect(output).toContain('data-nested-md="true"');
     expect(output).toContain("legacy content");
   });
 });
-

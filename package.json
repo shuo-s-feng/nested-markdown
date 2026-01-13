@@ -9,7 +9,7 @@
     "remark-gfm",
     "rehype",
     "nested-markdown",
-    "inline-md",
+    "nested-md",
     "renderer"
   ],
   "license": "MIT",

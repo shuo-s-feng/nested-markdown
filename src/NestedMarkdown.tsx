@@ -14,7 +14,6 @@ const customSchema = {
     ...defaultSchema.attributes,
     div: [
       ...(defaultSchema.attributes?.div || []),
-      ["data-inline-md"],
       ["data-nested-md"],
       ["data-id"],
       ["style"],
@@ -185,8 +184,8 @@ export const NestedMarkdown: React.FC<NestedMarkdownProps> = ({
         lineHeight: 1.6,
         color: "#000000",
         "& > *:first-child": { mt: 0 },
-        "& .inline-md-content > *:first-child": { mt: 0 },
-        "& .inline-md-content > *:last-child": { mb: 0 },
+        "& .nested-md-content > *:first-child": { mt: 0 },
+        "& .nested-md-content > *:last-child": { mb: 0 },
         "& > *:last-child": { mb: 0 },
         "& p": { mb: 0.5 },
         "& h1, & h2, & h3, & h4, & h5, & h6": {

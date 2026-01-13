@@ -9,11 +9,11 @@ import NestedMarkdown from "react-nested-markdown";
 const md = `
 Hello
 
-<!-- inline-md:start title="Tip" emoji="✨" show="preview" -->
+<!-- nested-md:start title="Tip" emoji="✨" show="preview" -->
 ```md
 You can nest markdown blocks inline.
 ```
-<!-- inline-md:end -->
+<!-- nested-md:end -->
 `;
 
 function App() {

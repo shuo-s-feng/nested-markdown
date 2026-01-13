@@ -31,7 +31,7 @@ export function findFencedBlocks(markdown: string): ParsedInlineMdBlock[] {
     const fenceLen = fence.length;
     const afterFence = openMatch[2].trimStart();
 
-    const infoMatch = afterFence.match(/^(nested-md|inline-md)\b(.*)$/);
+    const infoMatch = afterFence.match(/^(nested-md)\b(.*)$/);
     if (!infoMatch) continue;
 
     const attributeText = (infoMatch[2] || "").trim();

@@ -59,12 +59,12 @@ export function generateWrapperHTML(params: {
   const safeRenderedHTML = renderedHTML.replace(/\n/g, "&#10;");
 
   if (styles.show === "preview") {
-    bodyHTML = `<div class="inline-md-content">${safeRenderedHTML}</div>`;
+    bodyHTML = `<div class="nested-md-content">${safeRenderedHTML}</div>`;
   } else if (styles.show === "code") {
     bodyHTML = `<pre style="margin: 0; overflow-x: auto;"><code>${escapedMarkdown}</code></pre>`;
   } else if (styles.show === "both") {
     bodyHTML =
-      `<div class="inline-md-content">${safeRenderedHTML}</div>` +
+      `<div class="nested-md-content">${safeRenderedHTML}</div>` +
       `<hr style="margin: 16px 0; border: none; border-top: 1px solid ${styles.border};" />` +
       `<pre style="margin: 0; overflow-x: auto;"><code>${escapedMarkdown}</code></pre>`;
   }
@@ -73,8 +73,7 @@ export function generateWrapperHTML(params: {
     ? ` data-id="${escapeHtmlAttr(attributes.id)}"`
     : "";
 
-  return `<div data-inline-md="true" data-nested-md="true"${idAttr} style="${escapeHtmlAttr(
+  return `<div data-nested-md="true"${idAttr} style="${escapeHtmlAttr(
     wrapperStyle
   )}">${emojiHTML}<div style="flex-grow: 1; min-width: 0;">${titleHTML}${bodyHTML}</div></div>`;
 }
-

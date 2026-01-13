@@ -5,12 +5,12 @@ const initial = `# Nested Markdown Playground
 
 Type markdown on the left. Rendered output appears on the right.
 
-<!-- inline-md:start title="Tip" emoji="✨" show="both" -->
+<!-- nested-md:start title="Tip" emoji="✨" show="both" -->
 \`\`\`md
 - You can include tables, lists, images
 - Use show="preview" | "code" | "both"
 \`\`\`
-<!-- inline-md:end -->
+<!-- nested-md:end -->
 
 | Feature | Status |
 | --- | --- |
