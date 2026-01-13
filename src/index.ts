@@ -1,3 +1,2 @@
-export { default } from "./NestedMarkdown";
-export { default as NestedMarkdown } from "./NestedMarkdown";
+export { NestedMarkdown, default } from "./NestedMarkdown";
 export { expandNestedMarkdown } from "./nestedMdExpand";

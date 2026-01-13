@@ -6,15 +6,7 @@ import rehypeSanitize, { defaultSchema } from "rehype-sanitize";
 import { Box, SxProps, Theme } from "@mui/material";
 import { Image } from "antd";
 import { expandNestedMarkdown } from "./nestedMdExpand";
-
-const PRIMARY_GREEN = "#00C853";
-
-interface NestedMarkdownProps {
-  content: string;
-  className?: string;
-  components?: Components;
-  sx?: SxProps<Theme>;
-}
+import { PluggableList } from "unified";
 
 const customSchema = {
   ...defaultSchema,
@@ -53,12 +45,19 @@ const customSchema = {
   ],
 };
 
-export default function NestedMarkdown({
+export interface NestedMarkdownProps {
+  content: string;
+  className?: string;
+  components?: Components;
+  sx?: SxProps<Theme>;
+}
+
+export const NestedMarkdown: React.FC<NestedMarkdownProps> = ({
   content,
   className,
   components,
   sx,
-}: NestedMarkdownProps) {
+}) => {
   const [expandedMarkdown, setExpandedMarkdown] = useState("");
   const [error, setError] = useState<string | null>(null);
 
@@ -211,7 +210,6 @@ export default function NestedMarkdown({
         "& li": {
           mb: 0.5,
         },
-        "& a": { color: PRIMARY_GREEN, textDecoration: "none" },
         "& code": {
           bgcolor: "#f5f5f5",
           px: 0.5,
@@ -229,9 +227,12 @@ export default function NestedMarkdown({
       }}
     >
       <ReactMarkdown
-        remarkPlugins={[remarkGfm] as unknown as any}
+        remarkPlugins={[remarkGfm] as unknown as PluggableList}
         rehypePlugins={
-          [rehypeRaw, [rehypeSanitize, customSchema]] as unknown as any
+          [
+            rehypeRaw,
+            [rehypeSanitize, customSchema],
+          ] as unknown as PluggableList
         }
         components={mergedComponents}
       >
@@ -239,4 +240,6 @@ export default function NestedMarkdown({
       </ReactMarkdown>
     </Box>
   );
-}
+};
+
+export default NestedMarkdown;

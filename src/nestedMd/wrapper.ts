@@ -1,0 +1,80 @@
+import type { InlineMdBlockAttributes } from "./types";
+import { escapeHtmlAttr, escapeHtmlText } from "./escape";
+
+const DEFAULT_STYLES = {
+  bg: "#EEF6FF",
+  text: "#0F172A",
+  border: "#93C5FD",
+  show: "preview" as const,
+};
+
+export function generateWrapperHTML(params: {
+  attributes: InlineMdBlockAttributes;
+  nestedMarkdown: string;
+  renderedHTML: string;
+}): string {
+  const { attributes, nestedMarkdown, renderedHTML } = params;
+
+  const styles = {
+    bg: attributes.bg || DEFAULT_STYLES.bg,
+    text: attributes.text || DEFAULT_STYLES.text,
+    border: attributes.border || DEFAULT_STYLES.border,
+    show: attributes.show || DEFAULT_STYLES.show,
+  };
+
+  const isBoxed = attributes.boxed !== "false";
+  let wrapperStyle = "";
+
+  if (isBoxed) {
+    wrapperStyle = `display: flex; align-items: flex-start; gap: 16px; border-radius: 10px; padding: 16px 20px; margin: 16px 0; background-color: ${styles.bg}; color: ${styles.text}; border: 1px solid ${styles.border};`;
+  } else {
+    wrapperStyle = `display: flex; align-items: flex-start; gap: 16px; margin: 16px 0; color: ${styles.text};`;
+  }
+
+  if (attributes.style) {
+    wrapperStyle += ` ${attributes.style}`;
+  }
+
+  let emojiHTML = "";
+  if (attributes.emoji) {
+    emojiHTML = `<div style="flex-shrink: 0; font-size: 18px; line-height: 1; margin-top: 2px;">${escapeHtmlText(
+      attributes.emoji
+    )}</div>`;
+  }
+
+  let titleHTML = "";
+  if (attributes.title) {
+    titleHTML = `<div style="font-weight: 600; margin-bottom: 8px;">${escapeHtmlText(
+      attributes.title
+    )}</div>`;
+  }
+
+  let bodyHTML = "";
+  const escapedMarkdown = nestedMarkdown
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/\n/g, "&#10;");
+
+  const safeRenderedHTML = renderedHTML.replace(/\n/g, "&#10;");
+
+  if (styles.show === "preview") {
+    bodyHTML = `<div class="inline-md-content">${safeRenderedHTML}</div>`;
+  } else if (styles.show === "code") {
+    bodyHTML = `<pre style="margin: 0; overflow-x: auto;"><code>${escapedMarkdown}</code></pre>`;
+  } else if (styles.show === "both") {
+    bodyHTML =
+      `<div class="inline-md-content">${safeRenderedHTML}</div>` +
+      `<hr style="margin: 16px 0; border: none; border-top: 1px solid ${styles.border};" />` +
+      `<pre style="margin: 0; overflow-x: auto;"><code>${escapedMarkdown}</code></pre>`;
+  }
+
+  const idAttr = attributes.id
+    ? ` data-id="${escapeHtmlAttr(attributes.id)}"`
+    : "";
+
+  return `<div data-inline-md="true" data-nested-md="true"${idAttr} style="${escapeHtmlAttr(
+    wrapperStyle
+  )}">${emojiHTML}<div style="flex-grow: 1; min-width: 0;">${titleHTML}${bodyHTML}</div></div>`;
+}
+
