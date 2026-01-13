@@ -1,13 +1,13 @@
-# react-nested-markdown
+# nested-markdown
 
 React renderer for extended markdown with inline nested markdown blocks.
 
 ## Install
-- `npm i react-nested-markdown react react-dom @mui/material @emotion/react @emotion/styled antd`
+- `npm i nested-markdown react react-dom @mui/material @emotion/react @emotion/styled antd`
 
 ## Quick Start
 ```tsx
-import NestedMarkdown, { expandNestedMarkdown } from "react-nested-markdown";
+import NestedMarkdown, { expandNestedMarkdown } from "nested-markdown";
 
 const md = `
 This is normal markdown.

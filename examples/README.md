@@ -1,10 +1,11 @@
 # Examples
 
 ## Basic usage (Vite + React)
-```tsx
+
+````tsx
 import React from "react";
 import ReactDOM from "react-dom/client";
-import NestedMarkdown from "react-nested-markdown";
+import NestedMarkdown from "nested-markdown";
 
 const md = `
 Hello
@@ -12,16 +13,20 @@ Hello
 <!-- nested-md:start emoji="✨" show="preview" -->
 ```md
 You can nest markdown blocks inline.
-```
+````
+
 <!-- nested-md:end -->
+
 `;
 
 function App() {
-  return <NestedMarkdown content={md} />;
+return <NestedMarkdown content={md} />;
 }
 
 ReactDOM.createRoot(document.getElementById("root")!).render(<App />);
+
 ```
 
 Install peers:
 - `react`, `react-dom`, `@mui/material`, `@emotion/react`, `@emotion/styled`, `antd`
+```

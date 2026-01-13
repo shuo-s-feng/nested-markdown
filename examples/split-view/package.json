@@ -1,5 +1,5 @@
 {
-  "name": "react-nested-markdown-split-view",
+  "name": "nested-markdown-split-view",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -24,6 +24,7 @@
   "devDependencies": {
     "vite": "^5.0.0",
     "@vitejs/plugin-react": "^4.0.0",
+    "@types/node": "^22.0.0",
     "typescript": "^5.5.0"
   }
 }

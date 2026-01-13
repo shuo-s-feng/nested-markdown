@@ -1,5 +1,5 @@
 import { useState } from "react";
-import NestedMarkdown from "react-nested-markdown";
+import { NestedMarkdown } from "nested-markdown";
 
 const initial = `# Nested Markdown Playground
 

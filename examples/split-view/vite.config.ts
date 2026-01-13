@@ -1,15 +1,17 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      "react-nested-markdown": path.resolve(__dirname, "../../src/index.ts")
-    }
+      "nested-markdown": fileURLToPath(
+        new URL("../../src/index.ts", import.meta.url)
+      ),
+    },
   },
   server: {
-    port: 5173
-  }
+    port: 5173,
+  },
 });
