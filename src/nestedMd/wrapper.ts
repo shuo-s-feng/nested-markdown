@@ -13,8 +13,9 @@ export function generateWrapperHTML(params: {
   attributes: InlineMdBlockAttributes;
   nestedMarkdown: string;
   renderedHTML: string;
+  inline?: boolean;
 }): string {
-  const { attributes, nestedMarkdown, renderedHTML } = params;
+  const { attributes, nestedMarkdown, renderedHTML, inline } = params;
 
   const lightBgColor = attributes.bgColor || DEFAULT_STYLES.bgColor;
   const lightTextColor = attributes.textColor || DEFAULT_STYLES.textColor;
@@ -38,14 +39,23 @@ export function generateWrapperHTML(params: {
   };
 
   const isBoxed = attributes.boxed !== "false";
+  const isInline = inline === true;
   let wrapperStyle = "";
 
   const colorVars = `--nmd-inline-bg-light: ${styles.bgColor}; --nmd-inline-bg-dark: ${darkBgColor}; --nmd-inline-text-light: ${styles.textColor}; --nmd-inline-text-dark: ${darkTextColor}; --nmd-inline-border-light: ${styles.borderColor}; --nmd-inline-border-dark: ${darkBorderColor};`;
 
-  if (isBoxed) {
-    wrapperStyle = `display: flex; align-items: baseline; gap: 16px; border-radius: 10px; padding: 16px 20px; margin: 16px 0; ${colorVars} background-color: var(--nmd-inline-bg-light); color: var(--nmd-inline-text-light); border: 1px solid var(--nmd-inline-border-light);`;
+  if (isInline) {
+    if (isBoxed) {
+      wrapperStyle = `display: inline-flex; align-items: baseline; gap: 8px; border-radius: 8px; padding: 2px 10px; ${colorVars} background-color: var(--nmd-inline-bg-light); color: var(--nmd-inline-text-light); border: 1px solid var(--nmd-inline-border-light); vertical-align: middle;`;
+    } else {
+      wrapperStyle = `display: inline-flex; align-items: baseline; gap: 6px; ${colorVars} color: var(--nmd-inline-text-light); vertical-align: middle;`;
+    }
   } else {
-    wrapperStyle = `display: flex; align-items: baseline; gap: 16px; margin: 16px 0; ${colorVars} color: var(--nmd-inline-text-light);`;
+    if (isBoxed) {
+      wrapperStyle = `display: flex; align-items: baseline; gap: 16px; border-radius: 10px; padding: 16px 20px; margin: 16px 0; ${colorVars} background-color: var(--nmd-inline-bg-light); color: var(--nmd-inline-text-light); border: 1px solid var(--nmd-inline-border-light);`;
+    } else {
+      wrapperStyle = `display: flex; align-items: baseline; gap: 16px; margin: 16px 0; ${colorVars} color: var(--nmd-inline-text-light);`;
+    }
   }
 
   if (attributes.style) {
@@ -54,9 +64,10 @@ export function generateWrapperHTML(params: {
 
   let emojiHTML = "";
   if (attributes.emoji) {
-    emojiHTML = `<div style="flex-shrink: 0; font-size: 18px; line-height: 1;">${escapeHtmlText(
+    const emojiTag = isInline ? "span" : "div";
+    emojiHTML = `<${emojiTag} style="flex-shrink: 0; font-size: 18px; line-height: 1;">${escapeHtmlText(
       attributes.emoji
-    )}</div>`;
+    )}</${emojiTag}>`;
   }
 
   let bodyHTML = "";
@@ -69,7 +80,9 @@ export function generateWrapperHTML(params: {
   const safeRenderedHTML = renderedHTML.replace(/\n/g, "&#10;");
 
   if (styles.show === "preview") {
-    bodyHTML = `<div class="nested-md-content">${safeRenderedHTML}</div>`;
+    bodyHTML = isInline
+      ? `<span class="nested-md-content">${safeRenderedHTML}</span>`
+      : `<div class="nested-md-content">${safeRenderedHTML}</div>`;
   } else if (styles.show === "code") {
     bodyHTML = `<pre style="margin: 0; overflow-x: auto;"><code>${escapedMarkdown}</code></pre>`;
   } else if (styles.show === "both") {
@@ -85,7 +98,10 @@ export function generateWrapperHTML(params: {
 
   const boxedAttr = isBoxed ? ` data-boxed="true"` : "";
 
-  return `<div data-nested-md="true"${idAttr}${boxedAttr} style="${escapeHtmlAttr(
+  const wrapperTag = isInline ? "span" : "div";
+  const contentTag = isInline ? "span" : "div";
+
+  return `<${wrapperTag} data-nested-md="true"${idAttr}${boxedAttr} style="${escapeHtmlAttr(
     wrapperStyle
-  )}">${emojiHTML}<div style="flex-grow: 1; min-width: 0;">${bodyHTML}</div></div>`;
+  )}">${emojiHTML}<${contentTag} style="flex-grow: 1; min-width: 0;">${bodyHTML}</${contentTag}></${wrapperTag}>`;
 }

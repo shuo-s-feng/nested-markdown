@@ -46,11 +46,17 @@ async function expandNestedMarkdownInternal(
       depth + 1,
       recursionLimit
     );
-    const renderedHTML = await marked.parse(expandedBody);
+    const isInlineBlock = !isAtLineStart(result, block.startIndex);
+    const canInlineRender =
+      isInlineBlock && (block.attributes.show ?? "preview") === "preview";
+    const renderedHTML = canInlineRender
+      ? await marked.parseInline(expandedBody)
+      : await marked.parse(expandedBody);
     let wrapperHTML = generateWrapperHTML({
       attributes: block.attributes,
       nestedMarkdown: block.nestedMarkdown,
       renderedHTML,
+      inline: canInlineRender,
     });
 
     const after = result.slice(block.endIndex);

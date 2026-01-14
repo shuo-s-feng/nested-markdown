@@ -89,7 +89,20 @@ describe("expandNestedMarkdown", () => {
     ].join("\n");
 
     const output = await expandNestedMarkdown(input);
-    expect(output).toMatch(/<\/div> !\[A\]\(https:\/\/example\.com\/a\.png\)/);
-    expect(output).not.toMatch(/<\/div>\n\n !\[A\]/);
+    expect(output).toMatch(
+      /<\/span> !\[A\]\(https:\/\/example\.com\/a\.png\)/
+    );
+    expect(output).not.toMatch(/<\/span>\n\n !\[A\]/);
+  });
+
+  it("renders inline legacy preview blocks as a span wrapper", async () => {
+    const input = [
+      'before <!-- nested-md:start show="preview" -->**x**<!-- nested-md:end --> after',
+      "",
+    ].join("\n");
+
+    const output = await expandNestedMarkdown(input);
+    expect(output).toContain('<span data-nested-md="true"');
+    expect(output).toContain("<strong>x</strong>");
   });
 });
