@@ -1,9 +1,8 @@
 import { useState, useEffect, type CSSProperties } from "react";
-import ReactMarkdown, { Components } from "react-markdown";
+import ReactMarkdown, { type Components, type Options } from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import rehypeSanitize, { defaultSchema } from "rehype-sanitize";
-import { Image } from "antd";
 import { expandNestedMarkdown } from "./nestedMdExpand";
 import { PluggableList } from "unified";
 
@@ -105,8 +104,9 @@ const customSchema = {
   ],
 };
 
-export interface NestedMarkdownProps {
-  content: string;
+export interface NestedMarkdownProps extends Omit<Options, "children"> {
+  content?: string;
+  children?: string;
   className?: string;
   components?: Components;
   style?: CSSProperties;
@@ -115,27 +115,28 @@ export interface NestedMarkdownProps {
 
 export const NestedMarkdown = ({
   content,
+  children,
   className,
   components,
+  remarkPlugins,
+  rehypePlugins,
   style,
   theme = "auto",
+  ...reactMarkdownProps
 }: NestedMarkdownProps) => {
   const [expandedMarkdown, setExpandedMarkdown] = useState("");
-  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     let mounted = true;
     const process = async () => {
       try {
-        const expanded = await expandNestedMarkdown(content || "");
-        if (mounted) {
-          setExpandedMarkdown(expanded);
-          setError(null);
-        }
+        const markdownSource = content ?? children ?? "";
+        const expanded = await expandNestedMarkdown(markdownSource);
+        if (mounted) setExpandedMarkdown(expanded);
       } catch (err) {
         if (mounted) {
           console.error("Markdown expansion error:", err);
-          setExpandedMarkdown(content || "");
+          setExpandedMarkdown(content ?? children ?? "");
         }
       }
     };
@@ -143,7 +144,7 @@ export const NestedMarkdown = ({
     return () => {
       mounted = false;
     };
-  }, [content]);
+  }, [content, children]);
 
   const defaultComponents: Components = {
     a: ({ node, ...props }) => (
@@ -171,7 +172,8 @@ export const NestedMarkdown = ({
     ),
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     img: ({ node, ...props }: any) => {
-      let src = props.src;
+      const { className, style, ...imgProps } = props;
+      let src = imgProps.src;
       if (
         src &&
         !src.startsWith("http") &&
@@ -181,22 +183,11 @@ export const NestedMarkdown = ({
         src = `/${src}`;
       }
       return (
-        <Image
-          {...props}
+        <img
+          {...imgProps}
           src={src}
-          style={{
-            maxWidth: "100%",
-            maxHeight: "420px",
-            width: "auto",
-            height: "auto",
-            borderRadius: "8px",
-          }}
-          wrapperStyle={{
-            maxWidth: "100%",
-            width: "fit-content",
-            display: "block",
-            margin: "16px 0",
-          }}
+          className={["nmd-img", className].filter(Boolean).join(" ")}
+          style={style}
         />
       );
     },
@@ -207,6 +198,15 @@ export const NestedMarkdown = ({
   };
 
   const mergedComponents = { ...defaultComponents, ...components };
+  const mergedRemarkPlugins = [
+    remarkGfm,
+    ...(remarkPlugins ? remarkPlugins : []),
+  ] as unknown as PluggableList;
+  const mergedRehypePlugins = [
+    rehypeRaw,
+    ...(rehypePlugins ? rehypePlugins : []),
+    [rehypeSanitize, customSchema],
+  ] as unknown as PluggableList;
 
   const darkThemeVars: CssDeclarations = {
     "--nmd-text": "#e2e8f0",
@@ -324,6 +324,15 @@ export const NestedMarkdown = ({
       borderTop: "1px solid var(--nmd-border)",
       margin: "2em 0",
     },
+    ".nmd-root .nmd-img": {
+      maxWidth: "100%",
+      maxHeight: "420px",
+      width: "auto",
+      height: "auto",
+      borderRadius: "8px",
+      display: "block",
+      margin: "16px 0",
+    },
     ".nmd-root .nmd-pre": {
       margin: "16px 0",
       padding: "12px 14px",
@@ -427,13 +436,9 @@ export const NestedMarkdown = ({
     >
       <style>{`${stylesheet}\n${autoDarkStylesheet}`}</style>
       <ReactMarkdown
-        remarkPlugins={[remarkGfm] as unknown as PluggableList}
-        rehypePlugins={
-          [
-            rehypeRaw,
-            [rehypeSanitize, customSchema],
-          ] as unknown as PluggableList
-        }
+        {...(reactMarkdownProps as Omit<Options, "children">)}
+        remarkPlugins={mergedRemarkPlugins}
+        rehypePlugins={mergedRehypePlugins}
         components={mergedComponents}
       >
         {expandedMarkdown}

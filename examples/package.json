@@ -9,7 +9,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "antd": "^5.11.0",
     "marked": "^12.0.0",
     "nested-markdown": "^0.0.1",
     "react": "^18.2.0",
