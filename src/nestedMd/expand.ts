@@ -23,6 +23,12 @@ function countLeadingNewlines(value: string): number {
   return count;
 }
 
+function isAtLineStart(markdown: string, index: number): boolean {
+  const lineStart = markdown.lastIndexOf("\n", index - 1) + 1;
+  const prefix = markdown.slice(lineStart, index);
+  return /^[\t ]{0,3}$/.test(prefix);
+}
+
 async function expandNestedMarkdownInternal(
   markdown: string,
   depth: number,
@@ -48,10 +54,12 @@ async function expandNestedMarkdownInternal(
     });
 
     const after = result.slice(block.endIndex);
-    const trailing = countTrailingNewlines(wrapperHTML);
-    const leading = countLeadingNewlines(after);
-    const needed = Math.max(0, 2 - (trailing + leading));
-    if (needed > 0) wrapperHTML += "\n".repeat(needed);
+    if (isAtLineStart(result, block.startIndex)) {
+      const trailing = countTrailingNewlines(wrapperHTML);
+      const leading = countLeadingNewlines(after);
+      const needed = Math.max(0, 2 - (trailing + leading));
+      if (needed > 0) wrapperHTML += "\n".repeat(needed);
+    }
 
     result = result.slice(0, block.startIndex) + wrapperHTML + after;
   }

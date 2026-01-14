@@ -79,4 +79,17 @@ describe("expandNestedMarkdown", () => {
     const output = await expandNestedMarkdown(input);
     expect(output).toMatch(/data-nested-md="true"[\s\S]*?\n\n!\[Welcome Page\]\(/);
   });
+
+  it("does not inject blank lines for inline legacy blocks", async () => {
+    const input = [
+      "| col |",
+      "| --- |",
+      '| <!-- nested-md:start show="preview" -->hello<!-- nested-md:end --> ![A](https://example.com/a.png) |',
+      "",
+    ].join("\n");
+
+    const output = await expandNestedMarkdown(input);
+    expect(output).toMatch(/<\/div> !\[A\]\(https:\/\/example\.com\/a\.png\)/);
+    expect(output).not.toMatch(/<\/div>\n\n !\[A\]/);
+  });
 });
