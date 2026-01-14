@@ -3,7 +3,7 @@ import { NestedMarkdown } from "nested-markdown";
 
 const STORAGE_KEY = "nested-markdown:example-md";
 const THEME_STORAGE_KEY = "nested-markdown:example-theme";
-const FALLBACK_URL = "/example.md";
+const FALLBACK_URL = "./example.md";
 
 const inlineFallbackMd = `
 \`\`\`nested-md show="preview" bgColor="#EEF6FF" textColor="#0F172A" borderColor="#93C5FD" emoji="🔵"
