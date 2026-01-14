@@ -132,6 +132,9 @@ export default function App() {
               <option value="light">Light</option>
               <option value="dark">Dark</option>
             </select>
+            <button type="button" onClick={() => window.print()}>
+              Export PDF
+            </button>
           </div>
         </div>
         <div className="preview">

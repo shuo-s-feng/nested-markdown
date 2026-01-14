@@ -123,3 +123,30 @@ textarea {
   overflow: auto;
   padding: 12px;
 }
+
+@media print {
+  html,
+  body {
+    height: auto;
+  }
+  .pane.left,
+  .divider,
+  .toolbar {
+    display: none !important;
+  }
+  .container {
+    display: block;
+    height: auto;
+    background: #ffffff;
+    color: #000000;
+  }
+  .pane.right {
+    height: auto;
+  }
+  .preview {
+    overflow: visible;
+    padding: 0;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
