@@ -347,6 +347,10 @@ export const NestedMarkdown = ({
       borderCollapse: "separate",
       borderSpacing: 0,
     },
+    ".nmd-root .nmd-table .nmd-th:first-child, .nmd-root .nmd-table .nmd-td:first-child":
+      {
+        whiteSpace: "nowrap",
+      },
     ".nmd-root .nmd-th": {
       backgroundColor: "rgba(2, 6, 23, 0.04)",
       fontWeight: 600,
