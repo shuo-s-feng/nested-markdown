@@ -1,22 +1,29 @@
 ## Colored Boxes
+
 <!-- nested-md:start show="preview" bgColor="#F1FAEF" textColor="#0F172A" borderColor="#BBD4B7" emoji="✅" -->
+
 ### Lorem Ipsum
-Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
+
+Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+
 <!-- nested-md:end -->
 
 <!-- nested-md:start show="preview" bgColor="#FFFCE7" textColor="#0F172A" borderColor="#F1DD8B" emoji="💡" -->
+
 ### Lorem Ipsum
-Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
+
+Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+
 <!-- nested-md:end -->
 
 ```nested-md show="preview" bgColor="#FDE8E8" textColor="#0F172A" borderColor="#F87171" emoji="❌"
 ### Lorem Ipsum
-Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
+Lorem Ipsum is simply dummy text of the printing and typesetting industry.
 ```
 
 ```nested-md show="preview" bgColor="#EEF6FF" textColor="#0F172A" borderColor="#93C5FD" emoji="🔵"
 ### Lorem Ipsum
-Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
+Lorem Ipsum is simply dummy text of the printing and typesetting industry.
 ```
 
 ## Show Modes
@@ -27,7 +34,7 @@ Lorem Ipsum is simply dummy text of the printing and typesetting industry.
 - Supports **GFM** (tables, task lists, strikethrough)
 ```
 
-```nested-md show="code" emoji="</>"
+```nested-md show="code" emoji="💻"
 ### `show="code"`
 - This is a bullet in *markdown*
 - This is `inline code`
@@ -46,13 +53,17 @@ Lorem Ipsum is simply dummy text of the printing and typesetting industry.
 ## Legacy Comment Blocks
 
 <!-- nested-md:start show="preview" emoji="🗂️" -->
+
 Legacy block without an explicit `md` fence
+
 <!-- nested-md:end -->
 
 <!-- nested-md:start show="preview" emoji="🧾" -->
+
 ```md
 Legacy block with an explicit `md` fence
 ```
+
 <!-- nested-md:end -->
 
 ## Nested Blocks
@@ -104,11 +115,12 @@ export function hello(name: string) {
 ````
 
 ## Image
+
 ![600x400 Image](https://placehold.co/600x400)
 
 ## Table
 
-| Col | Value |
-| --- | --- |
-| Inline badge | <!-- nested-md:start boxed="false" emoji="🏷️" show="preview" style="margin: 0; display: inline-flex; align-items: center; gap: 6px; vertical-align: middle;" -->**tag**: `alpha`<!-- nested-md:end --> |
-| Boxed cell | <!-- nested-md:start boxed="true" emoji="📦" show="preview" bgColor="#EEF6FF" textColor="#0F172A" borderColor="#93C5FD" style="margin: 0; padding: 10px 12px;" -->A boxed block inside a table cell.<!-- nested-md:end --> |
+| Col          | Value                                                                                                                                                                                                                      |
+| ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Inline badge | <!-- nested-md:start boxed="false" emoji="🏷️" show="preview" style="margin: 0; display: inline-flex; align-items: center; gap: 6px; vertical-align: middle;" -->**tag**: `alpha`<!-- nested-md:end -->                     |
+| Boxed cell   | <!-- nested-md:start boxed="true" emoji="📦" show="preview" bgColor="#EEF6FF" textColor="#0F172A" borderColor="#93C5FD" style="margin: 0; padding: 10px 12px;" -->A boxed block inside a table cell.<!-- nested-md:end --> |

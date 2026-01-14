@@ -4,7 +4,7 @@ React renderer for extended markdown with inline nested markdown blocks.
 
 ## Demo
 
-Try out the [live demo](https://shuo-s-feng.github.io/nested/).
+Try out the [live demo](https://shuo-s-feng.github.io/nested-markdown/).
 
 ## Install
 
