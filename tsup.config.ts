@@ -6,9 +6,15 @@ export default defineConfig({
   dts: true,
   clean: true,
   sourcemap: true,
-  external: [
-    "react",
-    "react-dom",
-    "antd"
-  ]
+  skipNodeModulesBundle: false,
+  noExternal: [
+    "chroma-js",
+    "marked",
+    "react-markdown",
+    "rehype-raw",
+    "rehype-sanitize",
+    "remark-gfm",
+    "unified",
+  ],
+  external: ["react", "react-dom"],
 });
