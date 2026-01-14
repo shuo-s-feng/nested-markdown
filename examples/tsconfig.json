@@ -10,7 +10,7 @@
     "moduleResolution": "bundler",
     "baseUrl": ".",
     "paths": {
-      "nested-markdown": ["../../src/index.ts"]
+      "nested-markdown": ["../src/index.ts"]
     }
   },
   "include": ["src", "vite.config.ts"]

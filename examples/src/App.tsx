@@ -1,7 +1,11 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { NestedMarkdown } from "nested-markdown";
 
-const initial = `
+const STORAGE_KEY = "nested-markdown:example-md";
+const THEME_STORAGE_KEY = "nested-markdown:example-theme";
+const FALLBACK_URL = "/example.md";
+
+const inlineFallbackMd = `
 \`\`\`nested-md show="preview" bgColor="#EEF6FF" textColor="#0F172A" borderColor="#93C5FD" emoji="🔵"
 
 Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. 
@@ -20,14 +24,90 @@ Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
 `;
 
 export default function App() {
-  const [md, setMd] = useState(initial);
-  const [theme, setTheme] = useState<"auto" | "light" | "dark">("auto");
+  const hasInitialMdRef = useRef(false);
+  const fallbackMdRef = useRef<string>(inlineFallbackMd);
+
+  const [md, setMd] = useState(() => {
+    try {
+      const stored = window.localStorage.getItem(STORAGE_KEY);
+      if (stored !== null) {
+        hasInitialMdRef.current = true;
+        return stored;
+      }
+    } catch {
+      hasInitialMdRef.current = false;
+    }
+    return "";
+  });
+  const [theme, setTheme] = useState<"auto" | "light" | "dark">(() => {
+    try {
+      const stored = window.localStorage.getItem(THEME_STORAGE_KEY);
+      if (stored === "auto" || stored === "light" || stored === "dark") {
+        return stored;
+      }
+    } catch {
+      return "auto";
+    }
+    return "auto";
+  });
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const loadFallback = async () => {
+      try {
+        const response = await fetch(FALLBACK_URL);
+        if (!response.ok) {
+          throw new Error(
+            `Failed to load fallback markdown: ${response.status}`
+          );
+        }
+        const text = await response.text();
+        if (cancelled) return;
+        fallbackMdRef.current = text;
+        if (!hasInitialMdRef.current) {
+          hasInitialMdRef.current = true;
+          setMd(text);
+        }
+      } catch {
+        if (cancelled) return;
+        if (!hasInitialMdRef.current) {
+          hasInitialMdRef.current = true;
+          setMd(fallbackMdRef.current);
+        }
+      }
+    };
+
+    void loadFallback();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!hasInitialMdRef.current) return;
+    try {
+      window.localStorage.setItem(STORAGE_KEY, md);
+    } catch {
+      return;
+    }
+  }, [md]);
+
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(THEME_STORAGE_KEY, theme);
+    } catch {
+      return;
+    }
+  }, [theme]);
+
   return (
     <div className="container" data-theme={theme}>
       <div className="pane left">
         <div className="toolbar">
           <span>Markdown</span>
-          <button onClick={() => setMd(initial)}>Reset</button>
+          <button onClick={() => setMd(fallbackMdRef.current)}>Reset</button>
         </div>
         <textarea
           value={md}
