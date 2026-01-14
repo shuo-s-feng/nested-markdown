@@ -46,15 +46,15 @@ export function generateWrapperHTML(params: {
 
   if (isInline) {
     if (isBoxed) {
-      wrapperStyle = `display: inline-flex; align-items: baseline; gap: 8px; border-radius: 8px; padding: 2px 10px; ${colorVars} background-color: var(--nmd-inline-bg-light); color: var(--nmd-inline-text-light); border: 1px solid var(--nmd-inline-border-light); vertical-align: middle;`;
+      wrapperStyle = `display: inline-flex; align-items: baseline; gap: 0.5em; border-radius: 0.5em; padding: 0.125em 0.625em; ${colorVars} background-color: var(--nmd-inline-bg-light); color: var(--nmd-inline-text-light); border: 1px solid var(--nmd-inline-border-light); vertical-align: middle;`;
     } else {
-      wrapperStyle = `display: inline-flex; align-items: baseline; gap: 6px; ${colorVars} color: var(--nmd-inline-text-light); vertical-align: middle;`;
+      wrapperStyle = `display: inline-flex; align-items: baseline; gap: 0.375em; ${colorVars} color: var(--nmd-inline-text-light); vertical-align: middle;`;
     }
   } else {
     if (isBoxed) {
-      wrapperStyle = `display: flex; align-items: baseline; gap: 16px; border-radius: 10px; padding: 16px 20px; margin: 16px 0; ${colorVars} background-color: var(--nmd-inline-bg-light); color: var(--nmd-inline-text-light); border: 1px solid var(--nmd-inline-border-light);`;
+      wrapperStyle = `display: flex; align-items: baseline; gap: 1em; border-radius: 0.625em; padding: 1em 1.25em; margin: 1em 0; ${colorVars} background-color: var(--nmd-inline-bg-light); color: var(--nmd-inline-text-light); border: 1px solid var(--nmd-inline-border-light);`;
     } else {
-      wrapperStyle = `display: flex; align-items: baseline; gap: 16px; margin: 16px 0; ${colorVars} color: var(--nmd-inline-text-light);`;
+      wrapperStyle = `display: flex; align-items: baseline; gap: 1em; margin: 1em 0; ${colorVars} color: var(--nmd-inline-text-light);`;
     }
   }
 
@@ -65,7 +65,7 @@ export function generateWrapperHTML(params: {
   let emojiHTML = "";
   if (attributes.emoji) {
     const emojiTag = isInline ? "span" : "div";
-    emojiHTML = `<${emojiTag} style="flex-shrink: 0; font-size: 18px; line-height: 1;">${escapeHtmlText(
+    emojiHTML = `<${emojiTag} style="flex-shrink: 0; font-size: 1.125em; line-height: 1;">${escapeHtmlText(
       attributes.emoji
     )}</${emojiTag}>`;
   }
@@ -88,7 +88,7 @@ export function generateWrapperHTML(params: {
   } else if (styles.show === "both") {
     bodyHTML =
       `<div class="nested-md-content">${safeRenderedHTML}</div>` +
-      `<hr style="margin: 16px 0; border: none; border-top: 1px solid var(--nmd-inline-border-light);" />` +
+      `<hr style="margin: 1em 0; border: none; border-top: 1px solid var(--nmd-inline-border-light);" />` +
       `<pre style="margin: 0; overflow-x: auto;"><code>${escapedMarkdown}</code></pre>`;
   }
 
