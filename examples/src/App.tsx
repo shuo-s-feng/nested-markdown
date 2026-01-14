@@ -26,6 +26,7 @@ Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
 export default function App() {
   const hasInitialMdRef = useRef(false);
   const fallbackMdRef = useRef<string>(inlineFallbackMd);
+  const copyStatusResetTimeoutIdRef = useRef<number | null>(null);
 
   const [md, setMd] = useState(() => {
     try {
@@ -50,6 +51,9 @@ export default function App() {
     }
     return "auto";
   });
+  const [copyStatus, setCopyStatus] = useState<"idle" | "copied" | "failed">(
+    "idle"
+  );
 
   useEffect(() => {
     let cancelled = false;
@@ -86,6 +90,14 @@ export default function App() {
   }, []);
 
   useEffect(() => {
+    return () => {
+      if (copyStatusResetTimeoutIdRef.current !== null) {
+        window.clearTimeout(copyStatusResetTimeoutIdRef.current);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
     if (!hasInitialMdRef.current) return;
     try {
       window.localStorage.setItem(STORAGE_KEY, md);
@@ -102,12 +114,58 @@ export default function App() {
     }
   }, [theme]);
 
+  const copyMarkdown = async () => {
+    if (copyStatusResetTimeoutIdRef.current !== null) {
+      window.clearTimeout(copyStatusResetTimeoutIdRef.current);
+      copyStatusResetTimeoutIdRef.current = null;
+    }
+
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(md);
+      } else {
+        const el = document.createElement("textarea");
+        el.value = md;
+        el.setAttribute("readonly", "");
+        el.style.position = "fixed";
+        el.style.top = "0";
+        el.style.left = "-9999px";
+        document.body.appendChild(el);
+        el.select();
+        const ok = document.execCommand("copy");
+        document.body.removeChild(el);
+        if (!ok) {
+          throw new Error("Copy failed");
+        }
+      }
+
+      setCopyStatus("copied");
+    } catch {
+      setCopyStatus("failed");
+    }
+
+    copyStatusResetTimeoutIdRef.current = window.setTimeout(() => {
+      setCopyStatus("idle");
+    }, 1500);
+  };
+
   return (
     <div className="container" data-theme={theme}>
       <div className="pane left">
         <div className="toolbar">
           <span>Markdown</span>
-          <button onClick={() => setMd(fallbackMdRef.current)}>Reset</button>
+          <div className="toolbar-controls">
+            <button type="button" onClick={copyMarkdown}>
+              {copyStatus === "copied"
+                ? "Copied"
+                : copyStatus === "failed"
+                ? "Copy failed"
+                : "Copy"}
+            </button>
+            <button type="button" onClick={() => setMd(fallbackMdRef.current)}>
+              Reset
+            </button>
+          </div>
         </div>
         <textarea
           value={md}
