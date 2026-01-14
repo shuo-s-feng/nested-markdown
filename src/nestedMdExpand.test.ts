@@ -66,4 +66,17 @@ describe("expandNestedMarkdown", () => {
     expect(output).toContain("--nmd-inline-text-dark:");
     expect(output).toContain("--nmd-inline-border-dark:");
   });
+
+  it("does not swallow following markdown without a blank line", async () => {
+    const input = [
+      '```nested-md show="preview"',
+      "Block content",
+      "```",
+      "![Welcome Page](https://example.com/image.png)",
+      "",
+    ].join("\n");
+
+    const output = await expandNestedMarkdown(input);
+    expect(output).toMatch(/data-nested-md="true"[\s\S]*?\n\n!\[Welcome Page\]\(/);
+  });
 });

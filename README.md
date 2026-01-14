@@ -3,7 +3,21 @@
 React renderer for extended markdown with inline nested markdown blocks.
 
 ## Install
-- `npm i nested-markdown react react-dom antd`
+
+```bash
+npm i nested-markdown
+```
+
+or
+
+```
+yarn add nested-markdown
+```
+
+Peer dependencies:
+
+- `react` / `react-dom` (>= 17)
+- `antd` (>= 5)
 
 ## Quick Start
 ```tsx

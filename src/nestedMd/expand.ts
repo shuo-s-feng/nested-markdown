@@ -5,6 +5,24 @@ import { generateWrapperHTML } from "./wrapper";
 
 const DEFAULT_RECURSION_LIMIT = 8;
 
+function countTrailingNewlines(value: string): number {
+  let count = 0;
+  for (let i = value.length - 1; i >= 0; i--) {
+    if (value[i] !== "\n") break;
+    count++;
+  }
+  return count;
+}
+
+function countLeadingNewlines(value: string): number {
+  let count = 0;
+  for (let i = 0; i < value.length; i++) {
+    if (value[i] !== "\n") break;
+    count++;
+  }
+  return count;
+}
+
 async function expandNestedMarkdownInternal(
   markdown: string,
   depth: number,
@@ -23,12 +41,19 @@ async function expandNestedMarkdownInternal(
       recursionLimit
     );
     const renderedHTML = await marked.parse(expandedBody);
-    const wrapperHTML = generateWrapperHTML({
+    let wrapperHTML = generateWrapperHTML({
       attributes: block.attributes,
       nestedMarkdown: block.nestedMarkdown,
       renderedHTML,
     });
-    result = result.slice(0, block.startIndex) + wrapperHTML + result.slice(block.endIndex);
+
+    const after = result.slice(block.endIndex);
+    const trailing = countTrailingNewlines(wrapperHTML);
+    const leading = countLeadingNewlines(after);
+    const needed = Math.max(0, 2 - (trailing + leading));
+    if (needed > 0) wrapperHTML += "\n".repeat(needed);
+
+    result = result.slice(0, block.startIndex) + wrapperHTML + after;
   }
 
   return result;
@@ -41,4 +66,3 @@ export async function expandNestedMarkdown(
   const recursionLimit = options?.recursionLimit ?? DEFAULT_RECURSION_LIMIT;
   return expandNestedMarkdownInternal(markdown, 0, recursionLimit);
 }
-
