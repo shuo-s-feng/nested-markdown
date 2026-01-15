@@ -104,6 +104,26 @@ const customSchema = {
   ],
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const remarkForceLooseLists = () => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return (tree: any) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const visit = (node: any) => {
+      if (node.type === "list") {
+        node.spread = true;
+      }
+      if (node.type === "listItem") {
+        node.spread = true;
+      }
+      if (node.children) {
+        node.children.forEach(visit);
+      }
+    };
+    visit(tree);
+  };
+};
+
 export interface NestedMarkdownProps extends Omit<Options, "children"> {
   content?: string;
   children?: string;
@@ -198,6 +218,7 @@ export const NestedMarkdown = ({
   const mergedComponents = { ...defaultComponents, ...components };
   const mergedRemarkPlugins = [
     remarkGfm,
+    remarkForceLooseLists,
     ...(remarkPlugins ? remarkPlugins : []),
   ] as unknown as PluggableList;
   const mergedRehypePlugins = [
@@ -277,6 +298,8 @@ export const NestedMarkdown = ({
         fontWeight: 600,
         display: "block",
         letterSpacing: "-0.01em",
+        marginTop: "1em",
+        marginBottom: "0.5em",
       },
     ".nmd-root h1": { fontSize: "1.857em", lineHeight: "1.25" },
     ".nmd-root h2": { fontSize: "1.571em", lineHeight: "1.3" },
@@ -319,6 +342,7 @@ export const NestedMarkdown = ({
     ".nmd-root li > *:first-child": { marginTop: "0 !important" },
     ".nmd-root li > *:last-child": { marginBottom: "0 !important" },
     ".nmd-root li > ul, .nmd-root li > ol": { marginTop: "0.5em" },
+    ".nmd-root li > p": { marginBottom: 0 },
     ".nmd-root hr": {
       border: "none",
       borderTop: "1px solid var(--nmd-border)",
