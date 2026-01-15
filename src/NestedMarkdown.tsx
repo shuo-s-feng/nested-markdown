@@ -165,9 +165,7 @@ export const NestedMarkdown = ({
     code: ({ node, inline, className, ...props }: any) => (
       <code
         {...props}
-        className={[className, inline ? "nmd-code-inline" : "nmd-code-block"]
-          .filter(Boolean)
-          .join(" ")}
+        className={[className, "nmd-code"].filter(Boolean).join(" ")}
       />
     ),
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -244,6 +242,8 @@ export const NestedMarkdown = ({
       "--nmd-nested-bg": "#eef6ff",
       "--nmd-nested-text": "#0f172a",
       "--nmd-nested-border": "#93c5fd",
+      "--nmd-font-mono":
+        "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
       fontFamily: "var(--nmd-font)",
       fontSize: "0.875em",
       lineHeight: "1.7",
@@ -300,12 +300,12 @@ export const NestedMarkdown = ({
       textDecorationColor: "rgba(29, 78, 216, 0.6)",
     },
     ".nmd-root ul": {
-      paddingLeft: "1.5em",
+      paddingLeft: "2em",
       margin: "0.5em 0",
       listStyleType: "disc",
     },
     ".nmd-root ol": {
-      paddingLeft: "1.5em",
+      paddingLeft: "2em",
       margin: "0.5em 0",
       listStyleType: "decimal",
     },
@@ -341,18 +341,23 @@ export const NestedMarkdown = ({
       backgroundColor: "var(--nmd-bg)",
       overflowX: "auto",
       lineHeight: "1.55",
+      fontFamily: "var(--nmd-font-mono)",
     },
-    ".nmd-root .nmd-code-inline": {
+    ".nmd-root code": {
       backgroundColor: "var(--nmd-code-bg)",
-      border: "1px solid rgba(15, 23, 42, 0.08)",
+      border: "1px solid var(--nmd-code-border)",
       padding: "0.12em 0.35em",
-      borderRadius: "0.571em",
-      fontSize: "0.92em",
+      borderRadius: "0.25em",
+      fontFamily: "var(--nmd-font-mono)",
     },
-    ".nmd-root .nmd-code-block": {
+    ".nmd-root .nmd-pre code": {
       backgroundColor: "transparent",
       border: "none",
       padding: 0,
+      borderRadius: 0,
+      fontSize: "inherit",
+      fontFamily: "inherit",
+      color: "inherit",
     },
     ".nmd-root .nmd-table-wrap": {
       overflowX: "auto",

@@ -46,9 +46,9 @@ export function generateWrapperHTML(params: {
 
   if (isInline) {
     if (isBoxed) {
-      wrapperStyle = `display: inline-flex; align-items: baseline; gap: 0.5em; border-radius: 0.5em; padding: 0.125em 0.625em; ${colorVars} background-color: var(--nmd-inline-bg-light); color: var(--nmd-inline-text-light); border: 1px solid var(--nmd-inline-border-light); vertical-align: middle;`;
+      wrapperStyle = `display: inline-flex; align-items: baseline; gap: 0.5em; border-radius: 0.5em; padding: 0.125em 0.625em; ${colorVars} background-color: var(--nmd-inline-bg-light); color: var(--nmd-inline-text-light); border: 1px solid var(--nmd-inline-border-light);`;
     } else {
-      wrapperStyle = `display: inline-flex; align-items: baseline; gap: 0.375em; ${colorVars} color: var(--nmd-inline-text-light); vertical-align: middle;`;
+      wrapperStyle = `display: inline-flex; align-items: baseline; gap: 0.375em; ${colorVars} color: var(--nmd-inline-text-light);`;
     }
   } else {
     if (isBoxed) {
