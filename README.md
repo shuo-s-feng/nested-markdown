@@ -57,20 +57,21 @@ export default function App() {
 
 ## Nested Block Syntax
 
-- Preferred (fenced) syntax:
+For a comprehensive guide on syntax, attributes, and examples, please refer to the **[User Manual](MANUAL.md)**.
 
-  ````md
-  ```nested-md key="value" ...
-  ...markdown body...
-  ```
-  ````
+Preferred (fenced) syntax:
 
-- Legacy (HTML comment) syntax:
-  - Start: `<!-- nested-md:start key="value" ... -->`
-  - End: `<!-- nested-md:end -->`
-- Body:
-  - For fenced blocks: markdown between the fences
-  - For legacy blocks: either raw markdown or an inner fenced ` ```md ... ``` `
+````md
+```nested-md key="value" ...
+...raw markdown body...
+```
+````
+
+Legacy (HTML comment) syntax:
+
+- Start: `<!-- nested-md:start key="value" ... -->`
+- Body: raw markdown body or an inner raw markdown body fenced ` ```md ... ``` `
+- End: `<!-- nested-md:end -->`
 
 ### Attributes
 
@@ -86,6 +87,7 @@ export default function App() {
 - Tables are wrapped with horizontal scroll and basic table styles
 - Images render with a normal `<img>` and normalize relative `src` paths
 - Inline `code` and `mark` have gentle defaults
+- **Automatic Dark Mode**: Custom colors (bg/text/border) are automatically adjusted for dark mode, so you don't need to specify separate dark theme colors.
 
 ## Security
 
