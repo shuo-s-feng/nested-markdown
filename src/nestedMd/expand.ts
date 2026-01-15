@@ -59,6 +59,15 @@ async function expandNestedMarkdownInternal(
       inline: canInlineRender,
     });
 
+    // Preserve indentation for block-level elements (e.g. inside lists)
+    if (!isInlineBlock) {
+      const currentBlock = result.slice(block.startIndex, block.endIndex);
+      const indentation = currentBlock.match(/^[ \t]*/)?.[0] || "";
+      if (indentation) {
+        wrapperHTML = indentation + wrapperHTML;
+      }
+    }
+
     const after = result.slice(block.endIndex);
     if (isAtLineStart(result, block.startIndex)) {
       const trailing = countTrailingNewlines(wrapperHTML);
