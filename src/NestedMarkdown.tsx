@@ -316,8 +316,8 @@ export const NestedMarkdown = ({
     ".nmd-root ul > li:last-child, .nmd-root ol > li:last-child": {
       marginBottom: 0,
     },
-    ".nmd-root li > *:first-child": { marginTop: 0 },
-    ".nmd-root li > *:last-child": { marginBottom: 0 },
+    ".nmd-root li > *:first-child": { marginTop: "0 !important" },
+    ".nmd-root li > *:last-child": { marginBottom: "0 !important" },
     ".nmd-root li > ul, .nmd-root li > ol": { marginTop: "0.5em" },
     ".nmd-root hr": {
       border: "none",
