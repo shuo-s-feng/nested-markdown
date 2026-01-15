@@ -52,9 +52,9 @@ export function generateWrapperHTML(params: {
     }
   } else {
     if (isBoxed) {
-      wrapperStyle = `display: flex; align-items: baseline; gap: 1em; border-radius: 0.625em; padding: 1em 1.25em; margin: 1em 0; ${colorVars} background-color: var(--nmd-inline-bg-light); color: var(--nmd-inline-text-light); border: 1px solid var(--nmd-inline-border-light);`;
+      wrapperStyle = `display: flex; align-items: baseline; gap: 1em; border-radius: 0.714em; padding: 0.857em 1em; margin: 0.5em 0; ${colorVars} background-color: var(--nmd-inline-bg-light); color: var(--nmd-inline-text-light); border: 1px solid var(--nmd-inline-border-light);`;
     } else {
-      wrapperStyle = `display: flex; align-items: baseline; gap: 1em; margin: 1em 0; ${colorVars} color: var(--nmd-inline-text-light);`;
+      wrapperStyle = `display: flex; align-items: baseline; gap: 1em; margin: 0.5em 0; ${colorVars} color: var(--nmd-inline-text-light);`;
     }
   }
 

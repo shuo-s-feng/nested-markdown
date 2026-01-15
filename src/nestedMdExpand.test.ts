@@ -77,7 +77,9 @@ describe("expandNestedMarkdown", () => {
     ].join("\n");
 
     const output = await expandNestedMarkdown(input);
-    expect(output).toMatch(/data-nested-md="true"[\s\S]*?\n\n!\[Welcome Page\]\(/);
+    expect(output).toMatch(
+      /data-nested-md="true"[\s\S]*?\n\n!\[Welcome Page\]\(/
+    );
   });
 
   it("does not inject blank lines for inline legacy blocks", async () => {
@@ -89,9 +91,7 @@ describe("expandNestedMarkdown", () => {
     ].join("\n");
 
     const output = await expandNestedMarkdown(input);
-    expect(output).toMatch(
-      /<\/span> !\[A\]\(https:\/\/example\.com\/a\.png\)/
-    );
+    expect(output).toMatch(/<\/span> !\[A\]\(https:\/\/example\.com\/a\.png\)/);
     expect(output).not.toMatch(/<\/span>\n\n !\[A\]/);
   });
 
@@ -104,5 +104,16 @@ describe("expandNestedMarkdown", () => {
     const output = await expandNestedMarkdown(input);
     expect(output).toContain('<span data-nested-md="true"');
     expect(output).toContain("<strong>x</strong>");
+  });
+
+  it("uses updated padding and margin for nested-md blocks", async () => {
+    const input = ['```nested-md show="preview"', "Block content", "```"].join(
+      "\n"
+    );
+
+    const output = await expandNestedMarkdown(input);
+    expect(output).toContain("padding: 0.857em 1em");
+    expect(output).toContain("margin: 0.5em 0");
+    expect(output).toContain("border-radius: 0.714em");
   });
 });
