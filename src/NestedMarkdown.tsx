@@ -131,6 +131,7 @@ export interface NestedMarkdownProps extends Omit<Options, "children"> {
   components?: Components;
   style?: CSSProperties;
   theme?: "light" | "dark" | "auto";
+  defaultShow?: "preview" | "code" | "both";
 }
 
 export const NestedMarkdown = ({
@@ -142,6 +143,7 @@ export const NestedMarkdown = ({
   rehypePlugins,
   style,
   theme = "auto",
+  defaultShow,
   ...reactMarkdownProps
 }: NestedMarkdownProps) => {
   const [expandedMarkdown, setExpandedMarkdown] = useState("");
@@ -151,7 +153,9 @@ export const NestedMarkdown = ({
     const process = async () => {
       try {
         const markdownSource = content ?? children ?? "";
-        const expanded = await expandNestedMarkdown(markdownSource);
+        const expanded = await expandNestedMarkdown(markdownSource, {
+          defaultShow,
+        });
         if (mounted) setExpandedMarkdown(expanded);
       } catch (err) {
         if (mounted) {
@@ -164,7 +168,7 @@ export const NestedMarkdown = ({
     return () => {
       mounted = false;
     };
-  }, [content, children]);
+  }, [content, children, defaultShow]);
 
   const defaultComponents: Components = {
     a: ({ node, ...props }) => (

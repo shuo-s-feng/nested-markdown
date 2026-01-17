@@ -14,8 +14,9 @@ export function generateWrapperHTML(params: {
   nestedMarkdown: string;
   renderedHTML: string;
   inline?: boolean;
+  defaultShow?: "preview" | "code" | "both";
 }): string {
-  const { attributes, nestedMarkdown, renderedHTML, inline } = params;
+  const { attributes, nestedMarkdown, renderedHTML, inline, defaultShow } = params;
 
   const lightBgColor = attributes.bgColor || DEFAULT_STYLES.bgColor;
   const lightTextColor = attributes.textColor || DEFAULT_STYLES.textColor;
@@ -35,7 +36,7 @@ export function generateWrapperHTML(params: {
     bgColor: lightBgColor,
     textColor: lightTextColor,
     borderColor: lightBorderColor,
-    show: attributes.show || DEFAULT_STYLES.show,
+    show: defaultShow || attributes.show || DEFAULT_STYLES.show,
   };
 
   const isBoxed = attributes.boxed !== "false";

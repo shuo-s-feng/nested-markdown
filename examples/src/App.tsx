@@ -3,6 +3,7 @@ import { NestedMarkdown } from "nested-markdown";
 
 const STORAGE_KEY = "nested-markdown:example-md";
 const THEME_STORAGE_KEY = "nested-markdown:example-theme";
+const VIEW_MODE_STORAGE_KEY = "nested-markdown:example-view-mode";
 const FALLBACK_URL = "./example.md";
 
 const inlineFallbackMd = `
@@ -52,7 +53,20 @@ export default function App() {
     return "auto";
   });
   const [copyStatus, setCopyStatus] = useState<"idle" | "copied" | "failed">(
-    "idle"
+    "idle",
+  );
+  const [viewMode, setViewMode] = useState<"split" | "editor" | "preview">(
+    () => {
+      try {
+        const stored = window.localStorage.getItem(VIEW_MODE_STORAGE_KEY);
+        if (stored === "split" || stored === "editor" || stored === "preview") {
+          return stored;
+        }
+      } catch {
+        return "split";
+      }
+      return "split";
+    },
   );
 
   useEffect(() => {
@@ -63,7 +77,7 @@ export default function App() {
         const response = await fetch(FALLBACK_URL);
         if (!response.ok) {
           throw new Error(
-            `Failed to load fallback markdown: ${response.status}`
+            `Failed to load fallback markdown: ${response.status}`,
           );
         }
         const text = await response.text();
@@ -114,6 +128,14 @@ export default function App() {
     }
   }, [theme]);
 
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(VIEW_MODE_STORAGE_KEY, viewMode);
+    } catch {
+      return;
+    }
+  }, [viewMode]);
+
   const copyMarkdown = async () => {
     if (copyStatusResetTimeoutIdRef.current !== null) {
       window.clearTimeout(copyStatusResetTimeoutIdRef.current);
@@ -150,54 +172,73 @@ export default function App() {
   };
 
   return (
-    <div className="container" data-theme={theme}>
-      <div className="pane left">
-        <div className="toolbar">
-          <span>Markdown</span>
-          <div className="toolbar-controls">
-            <button type="button" onClick={copyMarkdown}>
-              {copyStatus === "copied"
-                ? "Copied"
-                : copyStatus === "failed"
+    <div className="app-root" data-theme={theme}>
+      <header className="header">
+        <span className="title">Nested Markdown</span>
+        <div className="header-controls">
+          <div className="button-group">
+            <button
+              className={viewMode === "editor" ? "active" : ""}
+              onClick={() => setViewMode("editor")}
+            >
+              Editor
+            </button>
+            <button
+              className={viewMode === "split" ? "active" : ""}
+              onClick={() => setViewMode("split")}
+            >
+              Split
+            </button>
+            <button
+              className={viewMode === "preview" ? "active" : ""}
+              onClick={() => setViewMode("preview")}
+            >
+              Preview
+            </button>
+          </div>
+          <div className="separator" />
+          <button type="button" onClick={copyMarkdown}>
+            {copyStatus === "copied"
+              ? "Copied"
+              : copyStatus === "failed"
                 ? "Copy failed"
                 : "Copy"}
-            </button>
-            <button type="button" onClick={() => setMd(fallbackMdRef.current)}>
-              Reset
-            </button>
+          </button>
+          <button type="button" onClick={() => setMd(fallbackMdRef.current)}>
+            Reset
+          </button>
+          <div className="separator" />
+          <select
+            value={theme}
+            onChange={(e) => setTheme(e.target.value as typeof theme)}
+          >
+            <option value="auto">Auto</option>
+            <option value="light">Light</option>
+            <option value="dark">Dark</option>
+          </select>
+          <button type="button" onClick={() => window.print()}>
+            Export PDF
+          </button>
+        </div>
+      </header>
+      <div className="workspace">
+        {viewMode !== "preview" && (
+          <div className="pane left">
+            <textarea
+              value={md}
+              onChange={(e) => setMd(e.target.value)}
+              spellCheck={false}
+            />
           </div>
-        </div>
-        <textarea
-          value={md}
-          onChange={(e) => setMd(e.target.value)}
-          spellCheck={false}
-        />
-      </div>
-      <div className="divider" />
-      <div className="pane right">
-        <div className="toolbar">
-          <span>Preview</span>
-          <div className="toolbar-controls">
-            <label className="toolbar-label" htmlFor="theme-select">
-              Theme
-            </label>
-            <select
-              id="theme-select"
-              value={theme}
-              onChange={(e) => setTheme(e.target.value as typeof theme)}
-            >
-              <option value="auto">Auto</option>
-              <option value="light">Light</option>
-              <option value="dark">Dark</option>
-            </select>
-            <button type="button" onClick={() => window.print()}>
-              Export PDF
-            </button>
+        )}
+        {viewMode === "split" && <div className="divider" />}
+        {viewMode !== "editor" && (
+          <div className="pane right">
+            <div className="preview">
+              <NestedMarkdown content={md} theme={theme} />
+            </div>
           </div>
-        </div>
-        <div className="preview">
-          <NestedMarkdown content={md} theme={theme} />
-        </div>
+        )}
       </div>
     </div>
   );

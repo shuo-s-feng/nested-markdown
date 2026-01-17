@@ -32,7 +32,8 @@ function isAtLineStart(markdown: string, index: number): boolean {
 async function expandNestedMarkdownInternal(
   markdown: string,
   depth: number,
-  recursionLimit: number
+  recursionLimit: number,
+  defaultShow?: "preview" | "code" | "both",
 ): Promise<string> {
   if (depth > recursionLimit) return markdown;
 
@@ -44,11 +45,12 @@ async function expandNestedMarkdownInternal(
     const expandedBody = await expandNestedMarkdownInternal(
       block.nestedMarkdown,
       depth + 1,
-      recursionLimit
+      recursionLimit,
+      defaultShow,
     );
     const isInlineBlock = !isAtLineStart(result, block.startIndex);
-    const canInlineRender =
-      isInlineBlock && (block.attributes.show ?? "preview") === "preview";
+    const resolvedShow = defaultShow || block.attributes.show || "preview";
+    const canInlineRender = isInlineBlock && resolvedShow === "preview";
     const renderedHTML = canInlineRender
       ? await marked.parseInline(expandedBody)
       : await marked.parse(expandedBody);
@@ -57,6 +59,7 @@ async function expandNestedMarkdownInternal(
       nestedMarkdown: block.nestedMarkdown,
       renderedHTML,
       inline: canInlineRender,
+      defaultShow,
     });
 
     // Preserve indentation for block-level elements (e.g. inside lists)
@@ -84,8 +87,16 @@ async function expandNestedMarkdownInternal(
 
 export async function expandNestedMarkdown(
   markdown: string,
-  options?: { recursionLimit?: number }
+  options?: {
+    recursionLimit?: number;
+    defaultShow?: "preview" | "code" | "both";
+  },
 ): Promise<string> {
   const recursionLimit = options?.recursionLimit ?? DEFAULT_RECURSION_LIMIT;
-  return expandNestedMarkdownInternal(markdown, 0, recursionLimit);
+  return expandNestedMarkdownInternal(
+    markdown,
+    0,
+    recursionLimit,
+    options?.defaultShow,
+  );
 }
