@@ -228,20 +228,20 @@ export const NestedMarkdown = ({
   ] as unknown as PluggableList;
 
   const darkThemeVars: CssDeclarations = {
-    "--nmd-text": "#e2e8f0",
-    "--nmd-muted": "#94a3b8",
-    "--nmd-border": "rgba(148, 163, 184, 0.22)",
-    "--nmd-bg": "#0b1220",
-    "--nmd-code-bg": "rgba(148, 163, 184, 0.12)",
-    "--nmd-code-border": "rgba(148, 163, 184, 0.25)",
-    "--nmd-quote-bg": "rgba(148, 163, 184, 0.08)",
-    "--nmd-link": "#60a5fa",
-    "--nmd-link-hover": "#93c5fd",
+    "--nmd-text": "#d4d4d4",
+    "--nmd-muted": "#a0a0a0",
+    "--nmd-border": "#3e3e3e",
+    "--nmd-bg": "#1e1e1e",
+    "--nmd-code-bg": "#2d2d2d",
+    "--nmd-code-border": "#3e3e3e",
+    "--nmd-quote-bg": "#252526",
+    "--nmd-link": "#3794ff",
+    "--nmd-link-hover": "#5ea6ff",
     "--nmd-mark-bg": "rgba(250, 204, 21, 0.22)",
     "--nmd-mark-text": "#e2e8f0",
-    "--nmd-nested-bg": "rgba(96, 165, 250, 0.14)",
-    "--nmd-nested-text": "#e2e8f0",
-    "--nmd-nested-border": "rgba(96, 165, 250, 0.45)",
+    "--nmd-nested-bg": "#252526",
+    "--nmd-nested-text": "#d4d4d4",
+    "--nmd-nested-border": "#3e3e3e",
     colorScheme: "dark",
   };
 
@@ -454,7 +454,7 @@ export const NestedMarkdown = ({
         borderTopColor:
           "var(--nmd-inline-border-dark, var(--nmd-inline-border-light)) !important",
       },
-    }
+    },
   )} }`;
 
   return (
