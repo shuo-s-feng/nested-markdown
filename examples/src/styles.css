@@ -137,8 +137,10 @@ textarea {
   .container {
     display: block;
     height: auto;
-    background: #ffffff;
-    color: #000000;
+    background: var(--bg);
+    color: var(--text);
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
   }
   .pane.right {
     height: auto;
