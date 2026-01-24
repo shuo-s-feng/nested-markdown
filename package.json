@@ -1,6 +1,6 @@
 {
   "name": "nested-markdown",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "React renderer for extended markdown with inline nested markdown blocks.",
   "keywords": [
     "react",
